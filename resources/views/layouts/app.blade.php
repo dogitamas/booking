@@ -25,31 +25,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 
-        <script type="text/javascript">
-            $(function() {
 
-                $('input[name="datefilter"]').daterangepicker({
-                    autoUpdateInput: false,
-                    alwaysShowCalendars: true,
-                    isInvalidDate: function(ele) {
-                        var currDate = moment(ele._d).format('YY-MM-DD');
-                        return ["24-01-01", "24-01-02", "24-01-03"].indexOf(currDate) != -1;
-                    },
-                    locale: {
-                        cancelLabel: 'Clear'
-                    }
-                });
-
-                $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
-                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-                });
-
-                $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-                    $(this).val('');
-                });
-
-            });
-        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

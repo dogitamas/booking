@@ -32,6 +32,7 @@ Route::get('/properties/delete/{id}', [\App\Http\Controllers\PropertiesControlle
 
 //bookings
 Route::get('/bookings', [\App\Http\Controllers\BookingsController::class, 'index'])->name('bookings');
+Route::post('/bookings/store', [\App\Http\Controllers\BookingsController::class, 'store'])->name('bookings.store');
 Route::get('/booking/create', [\App\Http\Controllers\BookingsController::class, 'create'])->name('bookings.create');
 
 Route::middleware('auth')->group(function () {

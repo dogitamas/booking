@@ -17,8 +17,8 @@
                             <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
                                 <span class="font-medium"> Success!</span>
                             </div>
-
                         @endif
+
                         <div class="mb-4">
                             <a href="/booking/create">
                                 <button class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded pl-[35px]">
@@ -37,7 +37,7 @@
                                     Vendég neve
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    telefonszáma
+                                    email cime
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     foglalás datuma
@@ -54,7 +54,7 @@
                                         {{ \App\Http\Controllers\BookingsController::getUserNameByID($booking['user_id'])}}
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ \App\Http\Controllers\BookingsController::getUserPhoneByID($booking['user_id'])}}
+                                        {{ \App\Http\Controllers\BookingsController::getUserEmailByID($booking['user_id'])}}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{$booking['from_date']}} - {{$booking['until_date']}}
