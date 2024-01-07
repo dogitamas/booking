@@ -5,48 +5,15 @@
         </h2>
     </x-slot>
 
-    <script type="text/javascript">
-        $(function() {
-
-            $('input[name="datefilter"]').daterangepicker({
-                autoUpdateInput: false,
-                alwaysShowCalendars: true,
-                isInvalidDate: function(ele) {
-                    var currDate = moment(ele._d).format('YYYY-MM-DD');
-                    return ["24-01-01", "24-01-02", "24-01-03"].indexOf(currDate) != -1;
-                },
-                locale: {
-                    fromLabel: 'Tól',
-                    toLabel: 'Ig',
-                    cancelLabel: 'Törlés',
-                    applyLabel: 'Rögzités'
-                }
-            });
-
-            $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-            });
-
-            $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
-
-            //var daylist = getDaysArray(new Date("2018-05-01"),new Date("2018-07-01"));
-            //daylist.map((v)=>v.toISOString().slice(0,10)).join("");
-
-        });
-    </script>
-    {{$bookings[0]['from_date']}}
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <h2 class="font-semibold text-xl">Foglalás rögzítése </h2>
+                    <h2 class="font-semibold text-3xl">Foglalás rögzítése </h2>
                     <form action="/bookings/store" method="post">
                         {{ csrf_field() }}
-                        <h3>Step 1 - Choose your apartment</h3>
-
+                        <h3 class="bold font-bold text-xl my-4"> 1. Válassz apartmant</h3>
                             <div class="flex mb-6 mt-4">
                                 <div class="flex-1 items-center flex">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16">
@@ -64,7 +31,7 @@
                                 </div>
                             </div>
 
-
+                        <h3 class="bold font-bold text-xl my-4">2. Add meg az adataid</h3>
                         <div class="grid items-end gap-6 mb-6 md:grid-cols-3">
                             <div class="relative">
                                 <input required type="text" id="small_filled" class="block rounded-t-lg px-2.5 pb-1.5 pt-4 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="" name="firstname" />
@@ -74,14 +41,8 @@
                                 <input required type="text" id="small_filled" class="block rounded-t-lg px-2.5 pb-1.5 pt-4 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="" name="lastname" />
                                 <label for="small_filled" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-3 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto required">Vezetéknév</label>
                             </div>
-                            <div class="relative">
-                                <h3>Bérleti időszak kiválsztása</h3>
-                                <input id="selectedDates" type="text" name="datefilter" value="" />
 
-
-                            </div>
                         </div>
-
 
 
                         <div class="grid items-end gap-6 mb-6 md:grid-cols-3">
@@ -96,26 +57,35 @@
                         </div>
 
 
+                        <div class="grid items-end gap-6 mb-6 md:grid-cols-2">
+                            <div class="relative">
+                                <h3 class="bold font-bold text-xl my-4">3. Válaszd ki a bérleti időszakot</h3>
+                                <div id='calendar'></div>
+                                <h2>Kivalasztott datumok:</h2>
+                                <div id="foglalas"></div>
+                                <input id="fromDate" value="" type="hidden" name="from_date">
+                                <input id="untilDate" value="" type="hidden" name="until_date">
+                            </div>
+                        </div>
 
+                        <div class="grid items-end gap-6 mb-6 md:grid-cols-3">
+                            <div class="relative">
+                                <a href="{{ route('bookings') }}" class="">
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative pl-[35px]" type="button">Vissza a listahoz
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="top-[8px] left-[12px] w-[20px] absolute w-6 h-6">
+                                            <path fill-rule="evenodd" d="M2.625 6.75a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0A.75.75 0 0 1 8.25 6h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75ZM2.625 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 12a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12A.75.75 0 0 1 7.5 12Zm-4.875 5.25a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                                        </svg>
 
+                                    </button>
+                                </a>
 
-                        <div class="mt-4">
-                            <a href="{{ route('bookings') }}">
-                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative pl-[35px]" type="button">Vissza a listahoz
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="top-[8px] left-[12px] w-[20px] absolute w-6 h-6">
-                                        <path fill-rule="evenodd" d="M2.625 6.75a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0A.75.75 0 0 1 8.25 6h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75ZM2.625 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 12a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12A.75.75 0 0 1 7.5 12Zm-4.875 5.25a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
-                                    </svg>
-
-                                </button>
-                            </a>
-
-                                <button type="submit" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative pl-[35px]">
+                                <button type="submit" class="float-right btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative pl-[35px]">
                                     Új foglalás rögzítése
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 absolute top-[8px] left-[6px]">
                                         <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
-
+                            </div>
                         </div>
 
                     </form>
@@ -123,5 +93,111 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        /*------------------------------------------
+        --------------------------------------------
+        Get Site URL
+        --------------------------------------------
+        --------------------------------------------*/
+        var SITEURL = "{{ url('/') }}";
 
+        /*------------------------------------------
+        --------------------------------------------
+        CSRF Token Setup
+        --------------------------------------------
+        --------------------------------------------*/
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        /*------------------------------------------
+        --------------------------------------------
+        FullCalender JS Code
+        --------------------------------------------
+        --------------------------------------------*/
+        var calendar = $('#calendar').fullCalendar({
+            eventSources: [
+                {
+                    url: '/bookings/data',
+                    color: 'yellow',   // an option!
+                    textColor: 'black' // an option!
+                }
+            ],
+            displayEventTime: false,
+            editable: true,
+            selectable: true,
+            selectHelper: true,
+            select: function (start, end, allDay) {
+
+                if(start.isBefore(moment())) {
+                    calendar.fullCalendar('unselect');
+                    alert('Ez a datum mar elmult.');
+                } else {
+                        calendar.fullCalendar('renderEvent',
+                            {
+                                id: 1,
+                                title: "Lefoglalva!",
+                                start: start,
+                                end: end,
+                                allDay: allDay
+                            },true);
+                        calendar.fullCalendar('unselect');
+
+                }
+
+                const date_ = moment(start._i).format("YYYY-MM-DD");
+                const date_v = moment(end._i).format("YYYY-MM-DD");
+
+                $('#foglalas').append(date_ + ' - ' + date_v);
+                $("#fromDate").val(date_);
+                $("#untilDate").val(date_v);
+            },
+            eventDrop: function (event, delta) {
+                calendar.fullCalendar('removeEvents', event.id);
+            },
+            dateClick: function(info) {
+                alert('Clicked on: ' + info.dateStr);
+                alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+                alert('Current view: ' + info.view.type);
+                // change the day's background color just for fun
+                info.dayEl.style.backgroundColor = 'red';
+            },
+            eventClick: function (event) {
+                var deleteMsg = confirm("Torolni kivanja a kivalasztott datumokat?");
+                if (deleteMsg) {
+                    calendar.fullCalendar('removeEvents', event.id);
+                    $('#foglalas').html('');
+                    $("#fromDate").val('');
+                    $("#untilDate").val('');
+                }
+            }
+
+        });
+
+
+        /*------------------------------------------
+        --------------------------------------------
+        Toastr Success Code
+        --------------------------------------------
+        --------------------------------------------*/
+        function displayMessage(message) {
+            console.log(message, 'Event');
+        }
+
+        function checkIfAvailable(fromDate, toDate, inputDate) {
+            if (
+                DateTime.fromISO(inputDate) >= DateTime.fromISO(fromDate) &&
+                DateTime.fromISO(inputDate) <= DateTime.fromISO(toDate)
+            ) {
+                console.log('within range');
+                return true;
+            } else {
+                 console.log('not in range');
+                return false;
+            }
+        }
+
+    </script>
 </x-app-layout>

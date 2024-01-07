@@ -31,6 +31,7 @@ Route::get('/properties/edit/{number}', [\App\Http\Controllers\PropertiesControl
 Route::get('/properties/delete/{id}', [\App\Http\Controllers\PropertiesController::class, 'destroy'])->name('properties.destroy');
 
 //bookings
+Route::get('/bookings/data', [\App\Http\Controllers\BookingsController::class, 'apis']);
 Route::get('/bookings', [\App\Http\Controllers\BookingsController::class, 'index'])->name('bookings');
 Route::post('/bookings/store', [\App\Http\Controllers\BookingsController::class, 'store'])->name('bookings.store');
 Route::get('/booking/create', [\App\Http\Controllers\BookingsController::class, 'create'])->name('bookings.create');

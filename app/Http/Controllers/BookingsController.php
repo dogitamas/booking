@@ -8,9 +8,22 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class BookingsController extends Controller
 {
+
+    public function apis() {
+        $bookings = Bookings::all();
+        $events = [];
+
+        foreach($bookings as $booking){
+            $events[] = array('title' => 'Foglalt!', 'start' => $booking['from_date'], 'end' => $booking['until_date']);
+        }
+
+        return response()->json($events);
+    }
+
     public function index() {
 
         return view('bookings', ['success' => false, 'bookings' => Bookings::all()]);
@@ -40,7 +53,8 @@ class BookingsController extends Controller
         $firstname = $request->input('firstname');
         $lastname = $request->input('lastname');
         $email = $request->input('email');
-        $fromDate = $request->input('datefilter');
+        $fromDate = $request->input('from_date');
+        $untilDate = $request->input('until_date');
         $prop = $request->input('prop');
 
         $user = $this->createUser($email, $firstname, $lastname);
@@ -49,8 +63,8 @@ class BookingsController extends Controller
             ->insert([
                 'user_id' => $user,
                 'property_id' => $prop,
-                'from_date' => '2024-01-01',
-                'until_date' => '2024-01-01',
+                'from_date' => $fromDate,
+                'until_date' => $untilDate,
                 'occupied_dates' => $fromDate
             ]);
         return view('bookings', ['success' => true, 'bookings' => Bookings::all()]);
